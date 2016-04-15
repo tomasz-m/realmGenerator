@@ -1,5 +1,11 @@
 <?php
-
+/*
+Just to explain how it works it as short as possible - we can find 2 stages:
+1 Json reading - its putting information about calsses and its object to a structure which is just a map of maps:) (key of the first map is a parent class name, and a key of the inner map is an object name, the value is a type name)
+2 Code generation - 
+It started as an gnerator for android files only and I've added Swift later.
+Becase of that the first phase is prepring data for andorid when actually the plan is to make it independed to chosen language.
+*/
 $json = $_POST["json"];
 $system = $_POST["system"]; //Android/Swift/ObjectiveC
 $addSeriazedNames = FALSE;
