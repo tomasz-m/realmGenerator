@@ -27,9 +27,17 @@ if (isset($_POST["tofile"])) {
 }
 
 //echo $json
-set_error_handler(function() {
-    die("Json processing error :(. I cannot tell you were exactly so please use third-party parser to check your json.");
-});
+//set_error_handler(function() {
+//    die("Json processing error :(. I cannot tell you were exactly so please use third-party parser to check your json.");
+//});
+// A user-defined error handler function
+function myErrorHandler($errno, $errstr, $errfile, $errline) {
+    echo "<b>Custom error:</b> [$errno] $errstr<br>";
+    echo " Error on line $errline in $errfile<br>";
+}
+
+// Set user-defined error handler function
+set_error_handler("myErrorHandler");
 
 require 'engine.php';
 

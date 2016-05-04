@@ -115,11 +115,11 @@ class DataStructure {
     function getFieldsSwift($values) {
         $fileStrig = "";
         foreach ($values as $x => $x_value) {
-            $type = $x_value;
+            $type = $x_value['type'];
             $starting = "dynamic var";
             if ($this->startsWith($x_value['type'], "RealmList<")) {
 
-                $type = " " . str_replace("RealmList<", "List<", $type) . "()";
+                $type = " = " . str_replace("RealmList<", "List<", $type) . "()";
                 $starting = "let";
             } else {
                 $type = getSwiftType($x_value['type']);
