@@ -33,15 +33,15 @@ if (isset($_POST["tofile"])) {
 }
 
 //echo $json
-set_error_handler(function() {
-    die("Json processing error :(. I cannot tell you were exactly so please use third-party parser to check your json.");
-});
+//set_error_handler(function() {
+//    die("Json processing error :(. I cannot tell you were exactly so please use third-party parser to check your json.");
+//});
 //
-//function myErrorHandler($errno, $errstr, $errfile, $errline) {
-//    echo "<b>Custom error:</b> [$errno] $errstr<br>";
-//    echo " Error on line $errline in $errfile<br>";
-//}
-//set_error_handler("myErrorHandler");
+function myErrorHandler($errno, $errstr, $errfile, $errline) {
+    echo "<b>Custom error:</b> [$errno] $errstr<br>";
+    echo " Error on line $errline in $errfile<br>";
+}
+set_error_handler("myErrorHandler");
 
 require 'engine.php';
 
@@ -105,12 +105,12 @@ function browse($json_array) {
             } else { //item in array is a primitive
                 if ($useGsonPrimitives && getTypeName($val) == "int") {
                     $contentType = contentType::PRIMITIVE_INT;
-                    $map->add("RealmInt", 'val', "int", null);
+                    $map->add("RealmInt", 'val', "int", null,null);
                 } elseif ($useGsonPrimitives && getTypeName($val) == "String") {
                     $contentType = contentType::PRIMITIVE_STRING;
-                    $map->add("RealmString", 'val', "String", null);
+                    $map->add("RealmString", 'val', "String", null,null);
                 } else {
-                    $map->add(end($stack), 'value', getTypeName($val), null);
+                    $map->add(end($stack), 'value', getTypeName($val), null,null);
                 }
             }
         } else if (is_array($val)) { //===>is a new object ({} or [])
@@ -120,15 +120,15 @@ function browse($json_array) {
             array_pop($stack);
             $depth--;
             if ($useGsonPrimitives && $innerType == contentType::PRIMITIVE_INT) {
-                $map->add(end($stack), lcfirst($key), getTypeName($val, "RealmInt"), $key);
+                $map->add(end($stack), lcfirst($key), getTypeName($val, "RealmInt"), $key, "RealmInt");
             } else if ($useGsonPrimitives && $innerType == contentType::PRIMITIVE_STRING) {
-                $map->add(end($stack), lcfirst($key), getTypeName($val, "RealmString"), $key);
+                $map->add(end($stack), lcfirst($key), getTypeName($val, "RealmString"), $key, "RealmString");
             } else {
-                $map->add(end($stack), lcfirst($key), getTypeName($val, ucfirst($key)), $key);
+                $map->add(end($stack), lcfirst($key), getTypeName($val, ucfirst($key)), $key, ucfirst($key));
             }
         } else {
             if (getTypeName($val) != NULL) {
-                $map->add(end($stack), lcfirst($key), getTypeName($val), $key);
+                $map->add(end($stack), lcfirst($key), getTypeName($val), $key, null);
             }
         }
     }

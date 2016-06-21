@@ -67,11 +67,14 @@
                 <p>You just need a json which describes the structure of your data.&nbsp;<br /> </p>
 
                 <br>
+                <div class="thumbnail">
                 <font color="#F0848B">
                 <h4>Note</h4>
-                There were some changes and on the website and new features are available.
-                Everything should work but in case I've missed something 
+                I've just added <b>ObjectiveC</b> support. I'm not working with this language so I'm not sure if everything works fine 
+                and meets good standards. I'll be grateful for any feedback.<br>
+                There were also some improvements in code - everything should work but in case I've missed something 
                 you can go to the  <a href="http://realmgenerator.eu/old/">old version</a>.</font>
+                </div>
             </div>
         </div>
 
@@ -92,9 +95,9 @@
                     <label class="btn btn-default">
                         <input type="radio" name="systems" value="Swift">
                         Swift</label>
-                    <label disabled class="btn btn-default">
-                        <input disabled type="radio" name="systems" value="ObjectiveC">
-                        Objective C</label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="systems" value="ObjectiveC">
+                        Objective C <i>TEST</i></label>
                 </div>
                 <br><br>
                 detect date in text fields <a href="dateConversionInfo.php" target="_blank"> INFO </a> <br>
