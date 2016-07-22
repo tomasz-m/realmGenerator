@@ -12,8 +12,8 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/fork-me-icon.css">
-        
-    <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+
+        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
         <span id="forkongithub"><a href="https://github.com/tomasz-m/realmGenerator">Fork<br>me on<br>GitHub</a></span>
@@ -34,30 +34,44 @@
 
         <div style="padding-bottom: 0"class="jumbotron">
             <div class="container">
-                <h1>Hello, lazy programmer!</h1>
-                <p>Here you can create files for <a href="http://realm.io" class="pink_text" target="_blank"><b>Realm</b></a> database for your android project with a <b>
-                        single click</b> <br></p>
-                <p>You just need a JSON which describes the structure of your data.&nbsp;<br /> </p>
+                <div class="row">
+                    <div class="col-md-10">
+                        <h1>Hello, lazy programmer!</h1>
+                        <p>Here you can create files for <a href="http://realm.io" class="pink_text" target="_blank"><b>Realm</b></a> database for your android project with a <b>
+                                single click</b> <br></p>
+                        <p>You just need a JSON which describes the structure of your data.&nbsp;<br /> </p>
 
-                <br>
-                <div class="thumbnail pink_text">
-                <h4>Note</h4>
-                I've just added <b>ObjectiveC</b> support. I'm not working with this language so I'm not sure if everything works fine 
-                and meets good standards. I'll be grateful for any feedback.<br>
+                        <br>
+                        <div class="thumbnail pink_text">
+                            <h4>Note</h4>
+                            I've just added <b>ObjectiveC</b> support. I'm not working with this language so I'm not sure if everything works fine 
+                            and meets good standards. I'll be grateful for any feedback.<br>
+                        </div>
+                    </div>
+                    <div class="col-md-2 side_text">
+                           Tools that you might also find useful:<br>
+                           <a class="btn btn-default side_text" role="button" target="blank" href="http://tomaszminiach.info/compareJsons/"
+                              style="width: 130px; margin: 4px">
+                               compare JSONs</a>
+                           <a class="btn btn-default side_text" role="button" target="blank" href="http://tomaszminiach.info/pureJson/"
+                              style="width: 130px; margin: 4px">
+                               clear JSON</a>
+                           
+                        </div> 
                 </div>
             </div>
             <svg style="margin-top: -20" viewBox="0 0 1000 100">
-                <path d="M 0 100 q 300 -120 1000 -20" stroke="#F25192"
-                stroke-width="2" fill="none" />
-                <path d="M 0 90 q 100 -70 1000 -50" stroke="#FCC397"
-                stroke-width="2" fill="none" />
-                <path d="M 0 70 q 400 -20 1000 -50" stroke="#D34CA3"
-                stroke-width="2" fill="none" />
-                <path d="M 0 20 q 400 80 1000 20" stroke="#FC9F95"
-                stroke-width="2" fill="none" />  
+            <path d="M 0 100 q 300 -120 1000 -20" stroke="#F25192"
+                  stroke-width="2" fill="none" />
+            <path d="M 0 90 q 100 -70 1000 -50" stroke="#FCC397"
+                  stroke-width="2" fill="none" />
+            <path d="M 0 70 q 400 -20 1000 -50" stroke="#D34CA3"
+                  stroke-width="2" fill="none" />
+            <path d="M 0 20 q 400 80 1000 20" stroke="#FC9F95"
+                  stroke-width="2" fill="none" />  
             </svg>
         </div>
-        
+
         <div class="container">
 
             <h2>Paste JSON here: </h2>
@@ -215,77 +229,77 @@
         <script src="js/analitics.js"></script>
 
         <script>
-            function generate() {
-                str = document.getElementById("inputArea").value;
-                if (str.length == 0) {
-                    document.getElementById("resultArea").value = "";
-                    return;
-                } else {
-                    var xmlhttp = new XMLHttpRequest();
-                    xmlhttp.onreadystatechange = function () {
-                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                            document.getElementById("resultArea").value = xmlhttp.responseText;
-                        }
-                    }
-                    xmlhttp.open("POST", "processor.php", true);
-                    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    var selectedSystem = $("input:radio[name ='systems']:checked").val();
-                    var detectDate = $("input:radio[name ='dateMode']:checked").val();
-                    var detectDate = $("input:radio[name ='dateMode']:checked").val();
-                    var includeAnnotations = false;
-                    if ($('#includeAnnotation').is(":checked"))
-                    {
-                        includeAnnotations = true;
-                    }
-                    var useGsonPrimitives = false;
-                    if ($('#gsonPrimitives').is(":checked"))
-                    {
-                        useGsonPrimitives = true;
-                    }
-                    xmlhttp.send("json=" + encodeURIComponent(str) + "&system=" + encodeURIComponent(selectedSystem)
-                            + "&detectDateMode=" + detectDate + "&addSerializedNames=" + includeAnnotations
-                            + "&useGsonPrimitives=" + useGsonPrimitives);
-
-                }
-
-            }
-            function generateZIP() {
-                str = document.getElementById("inputArea").value;
-                document.getElementById("download").style.visibility = "hidden";
-                package = document.getElementById("packageName").value;
-//                if(package.length == 0){
-//                    document.getElementById("packageReminder").style.visibility = "visible";
-//                }
-                if (str.length == 0) {
-                    document.getElementById("resultArea").value = "";
-                    return;
-                } else {
-                    var xmlhttp = new XMLHttpRequest();
-                    xmlhttp.onreadystatechange = function () {
-                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200 && xmlhttp.responseText != null) {
-                            if (xmlhttp.responseText.trim().substring(0, 6) == './data') {
-
-                                document.getElementById("download").href = xmlhttp.responseText;
-                                document.getElementById("download").style.visibility = "visible";
+                        function generate() {
+                            str = document.getElementById("inputArea").value;
+                            if (str.length == 0) {
+                                document.getElementById("resultArea").value = "";
+                                return;
                             } else {
-                                document.getElementById("resultArea").value = xmlhttp.responseText;
+                                var xmlhttp = new XMLHttpRequest();
+                                xmlhttp.onreadystatechange = function () {
+                                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                        document.getElementById("resultArea").value = xmlhttp.responseText;
+                                    }
+                                }
+                                xmlhttp.open("POST", "processor.php", true);
+                                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                var selectedSystem = $("input:radio[name ='systems']:checked").val();
+                                var detectDate = $("input:radio[name ='dateMode']:checked").val();
+                                var detectDate = $("input:radio[name ='dateMode']:checked").val();
+                                var includeAnnotations = false;
+                                if ($('#includeAnnotation').is(":checked"))
+                                {
+                                    includeAnnotations = true;
+                                }
+                                var useGsonPrimitives = false;
+                                if ($('#gsonPrimitives').is(":checked"))
+                                {
+                                    useGsonPrimitives = true;
+                                }
+                                xmlhttp.send("json=" + encodeURIComponent(str) + "&system=" + encodeURIComponent(selectedSystem)
+                                        + "&detectDateMode=" + detectDate + "&addSerializedNames=" + includeAnnotations
+                                        + "&useGsonPrimitives=" + useGsonPrimitives);
+
                             }
 
                         }
-                    }
-                    xmlhttp.open("POST", "processor.php", true);
-                    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    var selectedSystem = $("input:radio[name ='systems']:checked").val();
-                    var detectDate = $("input:radio[name ='dateMode']:checked").val();
-                    var includeAnnotations = false;
-                    if ($('#includeAnnotation').is(":checked"))
-                    {
-                        includeAnnotations = true;
-                    }
-                    xmlhttp.send("tofile=1&json=" + encodeURIComponent(str) + "&system=" + selectedSystem + "&detectDateMode=" + detectDate
-                            + "&addSerializedNames=" + includeAnnotations);
-                }
-            }
+                        function generateZIP() {
+                            str = document.getElementById("inputArea").value;
+                            document.getElementById("download").style.visibility = "hidden";
+                            package = document.getElementById("packageName").value;
+//                if(package.length == 0){
+//                    document.getElementById("packageReminder").style.visibility = "visible";
+//                }
+                            if (str.length == 0) {
+                                document.getElementById("resultArea").value = "";
+                                return;
+                            } else {
+                                var xmlhttp = new XMLHttpRequest();
+                                xmlhttp.onreadystatechange = function () {
+                                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200 && xmlhttp.responseText != null) {
+                                        if (xmlhttp.responseText.trim().substring(0, 6) == './data') {
+
+                                            document.getElementById("download").href = xmlhttp.responseText;
+                                            document.getElementById("download").style.visibility = "visible";
+                                        } else {
+                                            document.getElementById("resultArea").value = xmlhttp.responseText;
+                                        }
+
+                                    }
+                                }
+                                xmlhttp.open("POST", "processor.php", true);
+                                xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                var selectedSystem = $("input:radio[name ='systems']:checked").val();
+                                var detectDate = $("input:radio[name ='dateMode']:checked").val();
+                                var includeAnnotations = false;
+                                if ($('#includeAnnotation').is(":checked"))
+                                {
+                                    includeAnnotations = true;
+                                }
+                                xmlhttp.send("tofile=1&json=" + encodeURIComponent(str) + "&system=" + selectedSystem + "&detectDateMode=" + detectDate
+                                        + "&addSerializedNames=" + includeAnnotations);
+                            }
+                        }
         </script>
     </body>
 </html>
