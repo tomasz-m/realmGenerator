@@ -10,47 +10,20 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style>
-            .pink_text{
-                color: #F0848B;
-                text-align:center;
-            }
-            .manual_text{
-                text-align:center;
-            }
-            body {
-                padding-top: 50px;
-                padding-bottom: 20px;
-            }
-            .btn-realm {
-                background: #F0848B;
-                color: #ffffff;
-                margin-left: 20px;
-                margin-right: 20px;
-                margin-top: 3px;
-                width: 300px;
-            }
-            .centered-text {
-                text-align:center;
-            }    
-            IMG.displayed {
-                display: block;
-                margin-left: auto;
-                margin-right: auto; 
-            }
-        </style>
-<style>#forkongithub a{background:#000;color:#fff;text-decoration:none;font-family:arial,sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}#forkongithub a:hover{background:#c11;color:#fff;}#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:#fff;}#forkongithub a::after{bottom:1px;top:auto;}@media screen and (min-width:800px){#forkongithub{position:absolute;display:block;top:0;right:0;width:200px;overflow:hidden;height:200px;z-index:9999;}#forkongithub a{width:200px;position:absolute;top:60px;right:-60px;transform:rotate(45deg);-webkit-transform:rotate(45deg);-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);box-shadow:4px 4px 10px rgba(0,0,0,0.8);}}</style>
-        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/fork-me-icon.css">
+        
+    <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
-        <span id="forkongithub"><a href="https://github.com/tomasz-m/realmGenerator">Fork me on GitHub</a></span>
+        <span id="forkongithub"><a href="https://github.com/tomasz-m/realmGenerator">Fork<br>me on<br>GitHub</a></span>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <nav class="navbar navbar-default navbar-fixed-top navbar-theme" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><b>Realm</b> generator</a>
+                    <a class="navbar-brand" href="#"><b>realm</b> generator</a>
                 </div>
                 <div class="navbar-right">
                     <a class="navbar-text" href="about.html">About</a>
@@ -59,25 +32,32 @@
             </div>
         </nav>
 
-        <div class="jumbotron">
+        <div style="padding-bottom: 0"class="jumbotron">
             <div class="container">
                 <h1>Hello, lazy programmer!</h1>
-                <p>Here you can create files for <a href="http://realm.io" style="color:#F0848B" target="_blank"><b>Realm</b></a> database for your android project with a <b>
+                <p>Here you can create files for <a href="http://realm.io" class="pink_text" target="_blank"><b>Realm</b></a> database for your android project with a <b>
                         single click</b> <br></p>
-                <p>You just need a json which describes the structure of your data.&nbsp;<br /> </p>
+                <p>You just need a JSON which describes the structure of your data.&nbsp;<br /> </p>
 
                 <br>
-                <div class="thumbnail">
-                <font color="#F0848B">
+                <div class="thumbnail pink_text">
                 <h4>Note</h4>
                 I've just added <b>ObjectiveC</b> support. I'm not working with this language so I'm not sure if everything works fine 
                 and meets good standards. I'll be grateful for any feedback.<br>
-                There were also some improvements in code - everything should work but in case I've missed something 
-                you can go to the  <a href="http://realmgenerator.eu/old/">old version</a>.</font>
                 </div>
             </div>
+            <svg style="margin-top: -20" viewBox="0 0 1000 100">
+                <path d="M 0 100 q 300 -120 1000 -20" stroke="#F25192"
+                stroke-width="2" fill="none" />
+                <path d="M 0 90 q 100 -70 1000 -50" stroke="#FCC397"
+                stroke-width="2" fill="none" />
+                <path d="M 0 70 q 400 -20 1000 -50" stroke="#D34CA3"
+                stroke-width="2" fill="none" />
+                <path d="M 0 20 q 400 80 1000 20" stroke="#FC9F95"
+                stroke-width="2" fill="none" />  
+            </svg>
         </div>
-
+        
         <div class="container">
 
             <h2>Paste JSON here: </h2>
@@ -199,20 +179,20 @@
                 <!-- Example row of columns -->
                 <div class="row">
                     <div class="col-md-3">
-                        <h2 class="pink_text">1</h2>
-                        <p class="manual_text">Design a structure of your data in Json. Or just get it from web service developer.</p>
+                        <h2 class="pink_text-cener">1</h2>
+                        <p class="manual_text">Design a structure of your data in JSON. Or just get it from web service developer.</p>
                     </div>
                     <div class="col-md-3">
-                        <h2 class="pink_text">2</h2>
+                        <h2 class="pink_text-cener">2</h2>
                         <p class="manual_text">Use this website to generate java code.</p>                    
                     </div>
                     <div class="col-md-3">
-                        <h2 class="pink_text">3</h2>
+                        <h2 class="pink_text-cener">3</h2>
                         <p class="manual_text">Copy code to java class or download (and unzip) files and copy them <i>directly*</i> to Android Studio.</p>
                         <p class="manual_text"><i>* this will add package name automatically</i></p>
                     </div>
                     <div class="col-md-3">
-                        <h2 class="pink_text">4</h2>
+                        <h2 class="pink_text-cener">4</h2>
                         <p class="manual_text">Done.</p>
                     </div>
                 </div>

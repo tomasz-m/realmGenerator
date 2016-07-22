@@ -1,22 +1,48 @@
-
-
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.pink_text{
+    color: #F25192;
+}
+.pink_text-cener{
+    color: #F25192;
+    text-align:center;
+}
+.manual_text{
+    text-align:center;
+}
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+.btn-realm {
+    background: #F25192;
+    color: #ffffff;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 3px;
+    width: 300px;
+}
+.centered-text {
+    text-align:center;
+}
+.navbar-theme{
+    background: #fff;
+}
+.navbar-default .navbar-brand {
+    color: #1C233F;
+}
+.navbar-default .navbar-text {
+    color: #1C233F;
+}
+.jumbotron{
+    background: #fff;
+}
+p{
+    color: #1C233F;
+}
+IMG.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+}
+code{
+    padding:2px 4px;font-size:90%;color:#D34CA3;background-color:#EBEBF2;border-radius:4px
+}
