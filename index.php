@@ -166,7 +166,6 @@
             <div class="centered-text">
                 You can use this website in all its glory for <b>free</b>:). 
                 If it helped you or save some of your valuable time and you feal the need to share same pennies then go on;).
-                This will probably result in adding of swift and objective C support too.
                 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_donations">
                     <input type="hidden" name="business" value="makeitsmart.developer@gmail.com">
