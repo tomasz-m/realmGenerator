@@ -233,7 +233,7 @@ class DataStructure {
             case "boolean":
                 return "BOOL ";
             case "Date":
-                return " = NSDate *";
+                return "NSDate *";
             case "array":
                 if (is_numeric(key($val))) {
                     return "List<" . $argument . " *> <" . $argument . "> ";
