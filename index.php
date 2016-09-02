@@ -16,7 +16,7 @@
         <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
-        <span id="forkongithub"><a href="https://github.com/tomasz-m/realmGenerator">Fork<br>me on<br>GitHub</a></span>
+        <span id="forkongithub"><a href="https://github.com/tomasz-m/realmGenerator" target="_blank">Fork<br>me on<br>GitHub</a></span>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
