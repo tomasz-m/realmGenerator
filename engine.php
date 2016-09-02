@@ -32,6 +32,8 @@ class DataStructure {
             $this->showSwift($toFile, $folderName);
         } else if ($this->systemName == 'ObjectiveC') {
             $this->showObjectiveC($toFile, $folderName);
+        } else if ($this->systemName == 'ReactNative') {
+            $this->showReactNative($toFile, $folderName);
         }
     }
 
@@ -239,6 +241,77 @@ class DataStructure {
                     return $argument;
                 }
             default : return $type . " *";
+        }
+        return null;
+    }
+
+    ////////////////
+    ////////////REACTNATIVE SHOWER
+    function showReactNative($toFile, $folderName) {
+        $file_String = "";
+        $class_list_String = "";
+        foreach ($this->classes as $x => $x_value) {
+            $file_String .= "class " . $x . " {}\r\n";
+            $file_String .=  $x . ".schema = {\r\n";
+            $file_String .= "  name: '" . $x . "',\r\n";
+            $file_String .= $this->getFieldsReactNative($x_value);
+            $file_String .= "};\r\n";
+            
+            $class_list_String.=$x . ", ";
+
+            if (!$toFile) {
+                echo $file_String;
+                $file_String = "";
+            }
+        }
+        $class_list_String = "let realm = new Realm({schema: [".rtrim($class_list_String, ", ")."]});";
+        
+        if ($toFile) {
+            
+            $file = $folderName . 'Model.js';
+            file_put_contents($file, "import React, { Component } from 'react';
+import { AppRegistry, Text } from 'react-native';"."\r\n\r\n".$file_String.$class_list_String);
+        }else{
+            echo $class_list_String;
+        }
+    }
+
+    function getFieldsReactNative($values) {
+        $fileStrig = "  properties: {\r\n";
+        foreach ($values as $x => $x_value) {
+            $type = $x_value['type'];
+            $starting = "    ";
+            if (startsWith($type, "RealmList<")) {
+
+                $param = $x_value['param'];
+                $type = "{type: 'list', objectType: '" . $param ."'}";
+            } else {
+                $type = $this->getReactNative($type);
+            }
+            $fileStrig .= $starting . $x ." ". $type .",\r\n";
+        }
+        return $fileStrig."  }\r\n";
+    }
+
+    function getReactNative($type, $argument = null) {
+        switch ($type) {
+            case "String":
+                return "{type: 'string'}";
+            case "int":
+                return "{type: 'int'}";
+            case "float":
+                return "{type: 'float'}";
+            case "boolean":
+                return "{type: 'bool'}";
+            case "Date":
+                return "{type: 'date'}";
+            case "array":
+                if (is_numeric(key($val))) {
+                    return "List<" . $argument . " *> <" . $argument . "> ";
+                } else {
+                    return $argument;
+                }
+            default : return "{type: '".$type . "'}";
         }
         return null;
     }

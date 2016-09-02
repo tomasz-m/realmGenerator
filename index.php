@@ -44,7 +44,7 @@
                         <br>
                         <div class="thumbnail pink_text">
                             <h4>Note</h4>
-                            I've just added <b>ObjectiveC</b> support. I'm not working with this language so I'm not sure if everything works fine 
+                            I've recently added <b>ObjectiveC</b> and <b>React Native</b> support. I'm not working with those language so I'm not sure if everything works fine 
                             and meets good standards. I'll be grateful for any feedback.<br>
                         </div>
                     </div>
@@ -80,9 +80,9 @@
 
 
                 <div class="btn-group" data-toggle="buttons">
-                    <label disabled class="btn btn-default">
-                        <input disabled type="radio" name="systems" value="ReactNative">
-                        React Native</label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="systems" value="ReactNative">
+                        React Native <i>TEST</i></label>
                     <label class="btn btn-default active">
                         <input checked type="radio" name="systems" value="Android">
                         Android</label>
@@ -91,7 +91,7 @@
                         Swift</label>
                     <label class="btn btn-default">
                         <input type="radio" name="systems" value="ObjectiveC">
-                        Objective C <i>TEST</i></label>
+                        Objective C</label>
                 </div>
                 <br><br>
                 detect date in text fields <a href="dateConversionInfo.php" target="_blank"> INFO </a> <br>
