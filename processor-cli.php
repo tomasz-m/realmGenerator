@@ -119,8 +119,8 @@ function browse($json_array) {
 browse($json_array);
 
 if ($toFile) {
-    $uuid = uniqid("realm_model");
-    $path = "./data/" . $uuid . "/";
+    $path = "./generated/" . strtolower($system) . "/";
+    rrmdir($path);
     mkdir($path, 0777, true);
     $map->show(TRUE, $path);
 
@@ -153,3 +153,18 @@ function zipDir($dir, $zip, $relative_path = DIRECTORY_SEPARATOR) {
     }
     closedir($handle);
 }
+
+function rrmdir($dir) {
+    if (is_dir($dir)) {
+         $objects = scandir($dir);
+         foreach ($objects as $object) {
+               if ($object != "." && $object != "..") {
+                     if (is_dir($dir."/".$object))
+                       rrmdir($dir."/".$object);
+                     else
+                       unlink($dir."/".$object);
+               }
+         }
+         rmdir($dir);
+    }
+ }
