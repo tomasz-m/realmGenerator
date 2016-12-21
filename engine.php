@@ -84,7 +84,7 @@ class DataStructure {
             $fileStrig .= "    public " . $x . "(){ }\r\n";
             $fileStrig .= "\r\n";
 
-            $fileStrig .= $this->getGetterAndSetter($x_value);
+            $fileStrig .= $this->getGetterAndSetter($x, $x_value);
 
             $fileStrig .= "}\r\n";
             $fileStrig .= "\r\n";
@@ -109,11 +109,12 @@ class DataStructure {
         return $fileStrig;
     }
 
-    function getGetterAndSetter($values) {
+    function getGetterAndSetter($className, $values) {
         $fileStrig = "";
         foreach ($values as $x => $x_value) {
-            $fileStrig .= "    public void set" . ucfirst($x) . "(" . $x_value['type'] . " " . $x . "){\r\n";
-            $fileStrig .= "        this." . $x . " = " . $x . ";\r\n    }\r\n";
+            $fileStrig .= "    public " . $className . " set" . ucfirst($x) . "(" . $x_value['type'] . " " . $x . "){\r\n";
+            $fileStrig .= "        this." . $x . " = " . $x . ";\r\n";
+            $fileStrig .= "        return this;\r\n    }\r\n";
             $fileStrig .= "    public " . $x_value['type'] . " get" . ucfirst($x) . "(){\r\n";
             $fileStrig .= "        return this." . $x . ";\r\n    }\r\n";
         }
