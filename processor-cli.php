@@ -29,7 +29,9 @@ require 'engine.php';
 $map = new DataStructure();
 $map->setSystem($system);
 $map->setSerializedNames($addSeriazedNames);
-
+if ($argc > 3 && isset($argv[3])) {
+    $map->setAndroidPackage($argv[3]);
+}
 $json_array = json_decode($json, TRUE);
 
 $depth = 0;

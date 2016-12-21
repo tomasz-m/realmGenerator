@@ -5,6 +5,7 @@ class DataStructure {
     var $classes;
     var $systemName;
     var $addSerializedName = true;
+    var $androidPackage;
 
     function setSystem($name) {
         $this->systemName = $name;
@@ -12,6 +13,10 @@ class DataStructure {
 
     function setSerializedNames($test) {
         $this->addSerializedName = $test;
+    }
+
+    function setAndroidPackage($pkg) {
+        $this->androidPackage = $pkg;
     }
 
     function add($className, $objectName, $type, $nameOryginal, $genericParam) {
@@ -46,6 +51,7 @@ class DataStructure {
             if ($toFile) {
                 $usesDate = false;
                 $usesList = false;
+
                 foreach ($x_value as $key => $x_value_item) {
                     if ($x_value_item['type'] == "Date")
                         $usesDate = true;
@@ -53,6 +59,11 @@ class DataStructure {
                         $usesList = true;
                     }
                 }
+
+                if (isset($this->androidPackage)) {
+                    $fileStrig .= "package " . $this->androidPackage . ";\r\n\r\n";
+                }
+
                 if ($this->addSerializedName == 'true') {
                     $fileStrig .= "import com.google.gson.annotations.SerializedName;\r\n";
                 }
@@ -256,7 +267,7 @@ class DataStructure {
             $file_String .= "  name: '" . $x . "',\r\n";
             $file_String .= $this->getFieldsReactNative($x_value);
             $file_String .= "};\r\n";
-            
+
             $class_list_String.=$x . ", ";
 
             if (!$toFile) {
@@ -265,9 +276,9 @@ class DataStructure {
             }
         }
         $class_list_String = "let realm = new Realm({schema: [".rtrim($class_list_String, ", ")."]});";
-        
+
         if ($toFile) {
-            
+
             $file = $folderName . 'Model.js';
             file_put_contents($file, "import React, { Component } from 'react';
 import { AppRegistry, Text } from 'react-native';"."\r\n\r\n".$file_String.$class_list_String);
@@ -339,9 +350,9 @@ import { AppRegistry, Text } from 'react-native';"."\r\n\r\n".$file_String.$clas
 //        case "double":
 //            return "float";
 //        case "boolean":
-//            return "boolean";          
+//            return "boolean";
 //    }
 //    return null;
 //}
 
-    
+
