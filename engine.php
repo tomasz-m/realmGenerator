@@ -46,6 +46,7 @@ class DataStructure {
     function showAndroid($toFile, $folderName) {
 
         foreach ($this->classes as $x => $x_value) {
+            $hasPrimaryKey = false;
             $fileStrig = "";
 
             if ($toFile) {
@@ -53,6 +54,10 @@ class DataStructure {
                 $usesList = false;
 
                 foreach ($x_value as $key => $x_value_item) {
+                    if ($this->isPrimaryKey($key)) {
+                        $hasPrimaryKey = true;
+                    }
+
                     if ($x_value_item['type'] == "Date")
                         $usesDate = true;
                     else if (startsWith($x_value_item['type'], "RealmList<")) {
@@ -71,6 +76,8 @@ class DataStructure {
                     $fileStrig .= "import java.util.Date;\r\n";
                 if ($usesList)
                     $fileStrig .= "import io.realm.RealmList;\r\n";
+                if ($hasPrimaryKey)
+                    $fileStrig .= "import io.realm.annotations.PrimaryKey;\r\n";
                 $fileStrig .= "import io.realm.RealmObject;\r\n\r\n";
             }
 
@@ -98,12 +105,27 @@ class DataStructure {
         }
     }
 
+    // if the field name starts with @, it means it's a primary key!
+    function isPrimaryKey($value) {
+        return (strpos($value, '@') === 0);
+    }
+
+    function getPrimaryKeyFieldName($value) {
+        return substr($value, 1, strlen($value));
+    }
+
     function getFields($values) {
         $fileStrig = "";
         foreach ($values as $x => $x_value) {
+            if ($this->isPrimaryKey($x)) {
+                $fileStrig .= "    @PrimaryKey\r\n";
+                $x = $this->getPrimaryKeyFieldName($x);
+            }
+
             if ($this->addSerializedName == 'true') {
                 $fileStrig .= '    @SerializedName("' . $x_value['orgName'] . '")' . "\r\n";
             }
+
             $fileStrig .= "    private " . $x_value['type'] . " " . $x . ";\r\n";
         }
         return $fileStrig;
@@ -112,6 +134,10 @@ class DataStructure {
     function getGetterAndSetter($className, $values) {
         $fileStrig = "";
         foreach ($values as $x => $x_value) {
+            if ($this->isPrimaryKey($x)) {
+                $x = $this->getPrimaryKeyFieldName($x);
+            }
+
             $fileStrig .= "    public " . $className . " set" . ucfirst($x) . "(" . $x_value['type'] . " " . $x . "){\r\n";
             $fileStrig .= "        this." . $x . " = " . $x . ";\r\n";
             $fileStrig .= "        return this;\r\n    }\r\n";
@@ -124,6 +150,10 @@ class DataStructure {
     function getConstants($values) {
         $fileStrig = "";
         foreach ($values as $x => $x_value) {
+            if ($this->isPrimaryKey($x)) {
+                $x = $this->getPrimaryKeyFieldName($x);
+            }
+
             $fileStrig .= "    public static final String " . camelToSnake($x) . ' = "' . $x . '";' . "\r\n";
         }
         return $fileStrig;
