@@ -116,10 +116,16 @@ class DataStructure {
 
     function getFields($values) {
         $fileStrig = "";
+        $primaryKeyAssigned = false;
+
         foreach ($values as $x => $x_value) {
+
             if ($this->isPrimaryKey($x)) {
-                $fileStrig .= "    @PrimaryKey\r\n";
+                if (!$primaryKeyAssigned)
+                    $fileStrig .= "    @PrimaryKey\r\n";
+
                 $x = $this->getPrimaryKeyFieldName($x);
+                $primaryKeyAssigned = true;
             }
 
             if ($this->addSerializedName == 'true') {
@@ -166,6 +172,8 @@ class DataStructure {
             $fileStrig = "";
             $fileStrig .= "class " . $x . ": Object {\r\n";
             $fileStrig .= $this->getFieldsSwift($x_value);
+            $fileStrig .= $this->getPrimaryKeySwift($x_value);
+
             $fileStrig .= "}\r\n";
             $fileStrig .= "\r\n";
 
@@ -178,9 +186,30 @@ class DataStructure {
         }
     }
 
+    function getPrimaryKeySwift($values) {
+        $fileStrig = "";
+
+        foreach ($values as $x => $x_value) {
+            if ($this->isPrimaryKey($x)) {
+                $x = $this->getPrimaryKeyFieldName($x);
+
+                $fileStrig .= "\r\n    override static func primaryKey() -> String? {\r\n";
+                $fileStrig .= "        return \"" . $x . "\"\r\n";
+                $fileStrig .= "    }\r\n";
+                break;
+            }
+        }
+
+        return $fileStrig;
+    }
+
     function getFieldsSwift($values) {
         $fileStrig = "";
         foreach ($values as $x => $x_value) {
+            if ($this->isPrimaryKey($x)) {
+                $x = $this->getPrimaryKeyFieldName($x);
+            }
+
             $type = $x_value['type'];
             $starting = "dynamic var";
             if (startsWith($x_value['type'], "RealmList<")) {
