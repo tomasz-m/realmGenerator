@@ -313,7 +313,7 @@ class DataStructure {
             if (startsWith($type, "RealmList<")) {
 
                 $param = $x_value['param'];
-                $type = "RLMArray<" . $param . " *><" . $param . "> ";
+                $type = "RLMArray<" . $param . " *><" . $param . "> *";
             } else {
                 $type = $this->getObjectiveType($x_value['type']);
             }

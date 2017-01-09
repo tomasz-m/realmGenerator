@@ -49,15 +49,15 @@
                         </div>
                     </div>
                     <div class="col-md-2 side_text">
-                           Tools that you might also find useful:<br>
-                           <a class="btn btn-default side_text" role="button" target="blank" href="http://tomaszminiach.info/compareJsons/"
-                              style="width: 130px; margin: 4px">
-                               compare JSONs</a>
-                           <a class="btn btn-default side_text" role="button" target="blank" href="http://tomaszminiach.info/pureJson/"
-                              style="width: 130px; margin: 4px">
-                               clear JSON</a>
-                           
-                        </div> 
+                        Tools that you might also find useful:<br>
+                        <a class="btn btn-default side_text" role="button" target="blank" href="http://tomaszminiach.info/compareJsons/"
+                           style="width: 130px; margin: 4px">
+                            compare JSONs</a>
+                        <a class="btn btn-default side_text" role="button" target="blank" href="http://tomaszminiach.info/pureJson/"
+                           style="width: 130px; margin: 4px">
+                            clear JSON</a>
+
+                    </div> 
                 </div>
             </div>
             <svg style="margin-top: -20" viewBox="0 0 1000 100">
@@ -111,17 +111,10 @@
                 </div>
 
                 <br><br>
-                <div class="thumbnail">
-                    <h4>
-                        For android project:
-                    </h4>
-                    <p><strike>Package name
-                        <input id="packageName" type="text" placeholder="com.android.example" disabled>
-                        (its <u>optional</u> because Android Studio can add it automatically)</strike>
-                    </p>
-
+                <div id="infoForAndroid" class="thumbnail">
+                    
                     <h5>
-                        and if you are using GSON in your android project:
+                        If you are using GSON in your android project:
                     </h5>
                     <p>
                         <input id="includeAnnotation" type="checkbox"/>
@@ -134,6 +127,20 @@
                         <i>(you need then custom gson adapter like 
                             <a href="https://gist.github.com/jocollet/91d78da9f47922dc26d6" target="blank">this</a>)</i>
                     </p>
+                    
+                   
+                    
+                    <h5>Other:</h5>
+                    <p>You can add Primary Key if you add <code>@</code> to a field name 
+                        <i> (for example <code> "@Id":2 </code>)</i>.
+                        It will also generate <code>equals</code> method (added by <a href="https://github.com/gotev">gotev<a>)</p>
+                    
+                    
+                    <p>Package name
+                        <input id="packageName" type="text" placeholder="com.android.example">
+                        (its <u>optional</u> because Android Studio can add it automatically)
+                    </p>
+                    
                 </div>
 
 
@@ -228,6 +235,14 @@
         <script src="js/analitics.js"></script>
 
         <script>
+            $('input:radio[name="systems"]').change(
+            function(){
+                if ($(this).is(':checked') && $(this).val() == 'Android') {
+                    $("#infoForAndroid").show();
+                }else{
+                    $("#infoForAndroid").hide();
+                }
+            });
                         function generate() {
                             str = document.getElementById("inputArea").value;
                             if (str.length == 0) {
@@ -243,7 +258,6 @@
                                 xmlhttp.open("POST", "processor.php", true);
                                 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                                 var selectedSystem = $("input:radio[name ='systems']:checked").val();
-                                var detectDate = $("input:radio[name ='dateMode']:checked").val();
                                 var detectDate = $("input:radio[name ='dateMode']:checked").val();
                                 var includeAnnotations = false;
                                 if ($('#includeAnnotation').is(":checked"))
@@ -295,8 +309,13 @@
                                 {
                                     includeAnnotations = true;
                                 }
+                                var exraMsg ="";
+                                if(package.length > 0){
+                                    exraMsg = "&packageName=" + package;
+                                }
                                 xmlhttp.send("tofile=1&json=" + encodeURIComponent(str) + "&system=" + selectedSystem + "&detectDateMode=" + detectDate
-                                        + "&addSerializedNames=" + includeAnnotations);
+                                        + "&addSerializedNames=" + includeAnnotations
+                                        + exraMsg);
                             }
                         }
         </script>

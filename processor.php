@@ -10,6 +10,7 @@ $json = $_POST["json"];
 $system = $_POST["system"]; //Android/Swift/ObjectiveC
 $addSeriazedNames = FALSE;
 $useGsonPrimitives = FALSE;
+$packageName;
 $detectDateMode = 0;
 if (isset($_POST["detectDateMode"])) {
     if ($_POST["detectDateMode"] === "1") {
@@ -23,6 +24,9 @@ if (isset($_POST["addSerializedNames"])) {
 }
 if (isset($_POST["useGsonPrimitives"])) {
     $useGsonPrimitives = $_POST["useGsonPrimitives"] == 'true';
+}
+if (isset($_POST["packageName"])) {
+    $packageName = $_POST["packageName"];
 }
 $toFile = FALSE;
 if (isset($_POST["tofile"])) {
@@ -48,6 +52,9 @@ require 'engine.php';
 $map = new DataStructure();
 $map->setSystem($system);
 $map->setSerializedNames($addSeriazedNames);
+if (isset($packageName) && $packageName != null) {
+    $map->setAndroidPackage($packageName);
+}
 
 $json_array = json_decode($json, TRUE);
 
