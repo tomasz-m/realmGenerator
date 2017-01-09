@@ -93,6 +93,8 @@ class DataStructure {
 
             $fileStrig .= $this->getGetterAndSetter($x, $x_value);
 
+            $fileStrig .= $this->getEquals($x, $x_value);
+
             $fileStrig .= "}\r\n";
             $fileStrig .= "\r\n";
 
@@ -149,6 +151,33 @@ class DataStructure {
             $fileStrig .= "        return this;\r\n    }\r\n";
             $fileStrig .= "    public " . $x_value['type'] . " get" . ucfirst($x) . "(){\r\n";
             $fileStrig .= "        return this." . $x . ";\r\n    }\r\n";
+        }
+        return $fileStrig;
+    }
+
+    function getEquals($className, $values) {
+        $fileStrig = "";
+        foreach ($values as $x => $x_value) {
+            if ($this->isPrimaryKey($x)) {
+                $x = $this->getPrimaryKeyFieldName($x);
+
+                $fileStrig .= "\r\n    @Override\r\n";
+                $fileStrig .= "    public boolean equals(Object other) {\r\n";
+                $fileStrig .= "        if (other == null || other.getClass() != getClass())\r\n";
+                $fileStrig .= "            return false;\r\n\r\n";
+                $fileStrig .= "        if (other == this)\r\n";
+                $fileStrig .= "            return true;\r\n\r\n";
+                $fileStrig .= "        " . $className . " otherObj = (" . $className . ") other;\r\n";
+
+                if ($x_value['type'] == "String") {
+                    $fileStrig .= "        return " . $x . ".equals(otherObj." . $x . ");\r\n";
+                } else {
+                    $fileStrig .= "        return " . $x . " == otherObj." . $x . ";\r\n";
+                }
+
+                $fileStrig .= "    }\r\n";
+                return $fileStrig;
+            }
         }
         return $fileStrig;
     }
