@@ -5,6 +5,7 @@ class DataStructure {
     var $classes;
     var $systemName;
     var $addSerializedName = true;
+    var $androidPackage;
 
     function setSystem($name) {
         $this->systemName = $name;
@@ -12,6 +13,10 @@ class DataStructure {
 
     function setSerializedNames($test) {
         $this->addSerializedName = $test;
+    }
+
+    function setAndroidPackage($pkg) {
+        $this->androidPackage = $pkg;
     }
 
     function add($className, $objectName, $type, $nameOryginal, $genericParam) {
@@ -41,18 +46,29 @@ class DataStructure {
     function showAndroid($toFile, $folderName) {
 
         foreach ($this->classes as $x => $x_value) {
+            $hasPrimaryKey = false;
             $fileStrig = "";
 
             if ($toFile) {
                 $usesDate = false;
                 $usesList = false;
+
                 foreach ($x_value as $key => $x_value_item) {
+                    if ($this->isPrimaryKey($key)) {
+                        $hasPrimaryKey = true;
+                    }
+
                     if ($x_value_item['type'] == "Date")
                         $usesDate = true;
                     else if (startsWith($x_value_item['type'], "RealmList<")) {
                         $usesList = true;
                     }
                 }
+
+                if (isset($this->androidPackage)) {
+                    $fileStrig .= "package " . $this->androidPackage . ";\r\n\r\n";
+                }
+
                 if ($this->addSerializedName == 'true') {
                     $fileStrig .= "import com.google.gson.annotations.SerializedName;\r\n";
                 }
@@ -60,6 +76,8 @@ class DataStructure {
                     $fileStrig .= "import java.util.Date;\r\n";
                 if ($usesList)
                     $fileStrig .= "import io.realm.RealmList;\r\n";
+                if ($hasPrimaryKey)
+                    $fileStrig .= "import io.realm.annotations.PrimaryKey;\r\n";
                 $fileStrig .= "import io.realm.RealmObject;\r\n\r\n";
             }
 
@@ -73,7 +91,9 @@ class DataStructure {
             $fileStrig .= "    public " . $x . "(){ }\r\n";
             $fileStrig .= "\r\n";
 
-            $fileStrig .= $this->getGetterAndSetter($x_value);
+            $fileStrig .= $this->getGetterAndSetter($x, $x_value);
+
+            $fileStrig .= $this->getEquals($x, $x_value);
 
             $fileStrig .= "}\r\n";
             $fileStrig .= "\r\n";
@@ -87,24 +107,77 @@ class DataStructure {
         }
     }
 
+    // if the field name starts with @, it means it's a primary key!
+    function isPrimaryKey($value) {
+        return (strpos($value, '@') === 0);
+    }
+
+    function getPrimaryKeyFieldName($value) {
+        return substr($value, 1, strlen($value));
+    }
+
     function getFields($values) {
         $fileStrig = "";
+        $primaryKeyAssigned = false;
+
         foreach ($values as $x => $x_value) {
+
+            if ($this->isPrimaryKey($x)) {
+                if (!$primaryKeyAssigned)
+                    $fileStrig .= "    @PrimaryKey\r\n";
+
+                $x = $this->getPrimaryKeyFieldName($x);
+                $primaryKeyAssigned = true;
+            }
+
             if ($this->addSerializedName == 'true') {
                 $fileStrig .= '    @SerializedName("' . $x_value['orgName'] . '")' . "\r\n";
             }
+
             $fileStrig .= "    private " . $x_value['type'] . " " . $x . ";\r\n";
         }
         return $fileStrig;
     }
 
-    function getGetterAndSetter($values) {
+    function getGetterAndSetter($className, $values) {
         $fileStrig = "";
         foreach ($values as $x => $x_value) {
-            $fileStrig .= "    public void set" . ucfirst($x) . "(" . $x_value['type'] . " " . $x . "){\r\n";
-            $fileStrig .= "        this." . $x . " = " . $x . ";\r\n    }\r\n";
+            if ($this->isPrimaryKey($x)) {
+                $x = $this->getPrimaryKeyFieldName($x);
+            }
+
+            $fileStrig .= "    public " . $className . " set" . ucfirst($x) . "(" . $x_value['type'] . " " . $x . "){\r\n";
+            $fileStrig .= "        this." . $x . " = " . $x . ";\r\n";
+            $fileStrig .= "        return this;\r\n    }\r\n";
             $fileStrig .= "    public " . $x_value['type'] . " get" . ucfirst($x) . "(){\r\n";
             $fileStrig .= "        return this." . $x . ";\r\n    }\r\n";
+        }
+        return $fileStrig;
+    }
+
+    function getEquals($className, $values) {
+        $fileStrig = "";
+        foreach ($values as $x => $x_value) {
+            if ($this->isPrimaryKey($x)) {
+                $x = $this->getPrimaryKeyFieldName($x);
+
+                $fileStrig .= "\r\n    @Override\r\n";
+                $fileStrig .= "    public boolean equals(Object other) {\r\n";
+                $fileStrig .= "        if (other == null || other.getClass() != getClass())\r\n";
+                $fileStrig .= "            return false;\r\n\r\n";
+                $fileStrig .= "        if (other == this)\r\n";
+                $fileStrig .= "            return true;\r\n\r\n";
+                $fileStrig .= "        " . $className . " otherObj = (" . $className . ") other;\r\n";
+
+                if ($x_value['type'] == "String") {
+                    $fileStrig .= "        return " . $x . ".equals(otherObj." . $x . ");\r\n";
+                } else {
+                    $fileStrig .= "        return " . $x . " == otherObj." . $x . ";\r\n";
+                }
+
+                $fileStrig .= "    }\r\n";
+                return $fileStrig;
+            }
         }
         return $fileStrig;
     }
@@ -112,6 +185,10 @@ class DataStructure {
     function getConstants($values) {
         $fileStrig = "";
         foreach ($values as $x => $x_value) {
+            if ($this->isPrimaryKey($x)) {
+                $x = $this->getPrimaryKeyFieldName($x);
+            }
+
             $fileStrig .= "    public static final String " . camelToSnake($x) . ' = "' . $x . '";' . "\r\n";
         }
         return $fileStrig;
@@ -124,6 +201,8 @@ class DataStructure {
             $fileStrig = "";
             $fileStrig .= "class " . $x . ": Object {\r\n";
             $fileStrig .= $this->getFieldsSwift($x_value);
+            $fileStrig .= $this->getPrimaryKeySwift($x_value);
+
             $fileStrig .= "}\r\n";
             $fileStrig .= "\r\n";
 
@@ -136,9 +215,30 @@ class DataStructure {
         }
     }
 
+    function getPrimaryKeySwift($values) {
+        $fileStrig = "";
+
+        foreach ($values as $x => $x_value) {
+            if ($this->isPrimaryKey($x)) {
+                $x = $this->getPrimaryKeyFieldName($x);
+
+                $fileStrig .= "\r\n    override static func primaryKey() -> String? {\r\n";
+                $fileStrig .= "        return \"" . $x . "\"\r\n";
+                $fileStrig .= "    }\r\n";
+                break;
+            }
+        }
+
+        return $fileStrig;
+    }
+
     function getFieldsSwift($values) {
         $fileStrig = "";
         foreach ($values as $x => $x_value) {
+            if ($this->isPrimaryKey($x)) {
+                $x = $this->getPrimaryKeyFieldName($x);
+            }
+
             $type = $x_value['type'];
             $starting = "dynamic var";
             if (startsWith($x_value['type'], "RealmList<")) {
@@ -256,7 +356,7 @@ class DataStructure {
             $file_String .= "  name: '" . $x . "',\r\n";
             $file_String .= $this->getFieldsReactNative($x_value);
             $file_String .= "};\r\n";
-            
+
             $class_list_String.=$x . ", ";
 
             if (!$toFile) {
@@ -265,9 +365,9 @@ class DataStructure {
             }
         }
         $class_list_String = "let realm = new Realm({schema: [".rtrim($class_list_String, ", ")."]});";
-        
+
         if ($toFile) {
-            
+
             $file = $folderName . 'Model.js';
             file_put_contents($file, "import React, { Component } from 'react';
 import { AppRegistry, Text } from 'react-native';"."\r\n\r\n".$file_String.$class_list_String);
@@ -339,9 +439,9 @@ import { AppRegistry, Text } from 'react-native';"."\r\n\r\n".$file_String.$clas
 //        case "double":
 //            return "float";
 //        case "boolean":
-//            return "boolean";          
+//            return "boolean";
 //    }
 //    return null;
 //}
 
-    
+
